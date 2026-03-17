@@ -437,3 +437,176 @@ input[type="text"]:focus {
     position: absolute;
     left: 0;
 }
+
+/* ============================
+   MOBILE CONTROLS
+   ============================ */
+#mobile-controls {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* Joystick */
+#joystick-zone {
+    position: absolute;
+    left: 24px;
+    bottom: 40px;
+    pointer-events: all;
+}
+
+#joystick-base {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    touch-action: none;
+}
+
+#joystick-knob {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #818cf8, #4f46e5);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.7);
+    transition: transform 0.05s linear;
+}
+
+/* Action Buttons */
+#action-buttons {
+    position: absolute;
+    right: 24px;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    pointer-events: all;
+}
+
+.action-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.action-btn small {
+    font-size: 0.5rem;
+    letter-spacing: 0.04em;
+    opacity: 0.8;
+}
+
+.action-btn:active {
+    background: rgba(99, 102, 241, 0.5);
+    transform: scale(0.92);
+}
+
+.pulse-btn {
+    animation: pulseBorder 2s infinite;
+}
+
+@keyframes pulseBorder {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+    50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+}
+
+/* ============================
+   RESPONSIVE MEDIA QUERIES
+   ============================ */
+@media (max-width: 600px) {
+    /* Glass panels - full width on mobile */
+    .glass-panel {
+        width: 92vw;
+        max-width: 92vw;
+        padding: 1.5rem 1.2rem;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.2rem; }
+    p  { font-size: 0.9rem; }
+
+    /* Character grid — 3 per row */
+    .char-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
+
+    .char-icon { font-size: 1.8rem; }
+    .char-card { padding: 0.6rem; }
+    .char-card span { font-size: 0.65rem; }
+
+    /* Reduce puzzle modals */
+    #puzzle-content {
+        width: 92vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 1rem;
+    }
+
+    /* Logo puzzle — smaller fragments on mobile */
+    .logo-puzzle-grid {
+        grid-template-columns: repeat(3, 80px);
+        grid-template-rows: repeat(3, 80px);
+    }
+    .logo-fragment {
+        width: 80px;
+        height: 80px;
+        background-size: 240px 240px;
+    }
+
+    /* Sentence match — stack columns vertically on very small screens */
+    .sentence-match-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* Memory grid */
+    .memory-grid {
+        grid-template-columns: repeat(4, 50px);
+        gap: 5px;
+    }
+    .memory-card {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    /* HUD */
+    .hud-top {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    /* Puzzle title */
+    .puzzle-title-screen h1 {
+        font-size: 1.4rem;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        padding: 0.7rem 1.4rem;
+        font-size: 0.85rem;
+    }
+}

@@ -911,5 +911,82 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+// =====================
+// MOBILE CONTROLS
+// =====================
+function setupMobileControls() {
+    const isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    if (!isMobile) return;
+
+    document.getElementById('mobile-controls').classList.remove('hidden');
+
+    const joystickBase = document.getElementById('joystick-base');
+    const joystickKnob = document.getElementById('joystick-knob');
+    const JOYSTICK_MAX = 45; // max drag distance in px
+
+    let touchId = null;
+    let baseX = 0, baseY = 0;
+
+    joystickBase.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.changedTouches[0];
+        touchId = touch.identifier;
+        const rect = joystickBase.getBoundingClientRect();
+        baseX = rect.left + rect.width / 2;
+        baseY = rect.top + rect.height / 2;
+    }, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+        if (touchId === null) return;
+        for (let touch of e.changedTouches) {
+            if (touch.identifier !== touchId) continue;
+            const dx = touch.clientX - baseX;
+            const dy = touch.clientY - baseY;
+            const dist = Math.min(Math.sqrt(dx * dx + dy * dy), JOYSTICK_MAX);
+            const angle = Math.atan2(dy, dx);
+
+            // Move knob visually
+            joystickKnob.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px)`;
+
+            // Map to keys using threshold
+            const threshold = JOYSTICK_MAX * 0.3;
+            keys['w'] = dy < -threshold;
+            keys['s'] = dy > threshold;
+            keys['a'] = dx < -threshold;
+            keys['d'] = dx > threshold;
+        }
+    }, { passive: false });
+
+    const clearJoystick = (e) => {
+        for (let touch of e.changedTouches) {
+            if (touch.identifier === touchId) {
+                touchId = null;
+                joystickKnob.style.transform = 'translate(0, 0)';
+                keys['w'] = false; keys['s'] = false;
+                keys['a'] = false; keys['d'] = false;
+            }
+        }
+    };
+    document.addEventListener('touchend', clearJoystick);
+    document.addEventListener('touchcancel', clearJoystick);
+
+    // Jump button
+    document.getElementById('btn-jump').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keys[' '] = true;
+    });
+    document.getElementById('btn-jump').addEventListener('touchend', () => {
+        keys[' '] = false;
+    });
+
+    // Interact button (simulates pressing 'e')
+    document.getElementById('btn-interact').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        // Trigger interact the same way the keyboard 'e' does
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'e' }));
+    });
+}
+
 // Start everything
 init();
+setupMobileControls();
