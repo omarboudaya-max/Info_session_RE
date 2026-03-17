@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPR Vision Planet - HEC Entrepreneurs</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="ui-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="overlay active">
+            <div class="glass-panel">
+                <h1>VPR Vision Planet</h1>
+                <p>Explore the Strategic Objectives for HEC Entrepreneurs</p>
+                <button id="btn-play" class="btn-primary">PLAY</button>
+            </div>
+        </div>
+
+        <!-- Character Selection -->
+        <div id="char-selection" class="overlay">
+            <div class="glass-panel">
+                <h2>Choose Your Avatar</h2>
+                <div class="char-grid">
+                    <div class="char-card" data-trait="Resilient">
+                        <div class="char-icon">🛡️</div>
+                        <span>Resilient</span>
+                    </div>
+                    <div class="char-card" data-trait="Strategic">
+                        <div class="char-icon">♟️</div>
+                        <span>Strategic</span>
+                    </div>
+                    <div class="char-card" data-trait="Visionary">
+                        <div class="char-icon">👁️</div>
+                        <span>Visionary</span>
+                    </div>
+                    <div class="char-card" data-trait="Creative">
+                        <div class="char-icon">🎨</div>
+                        <span>Creative</span>
+                    </div>
+                    <div class="char-card" data-trait="Bold">
+                        <div class="char-icon">🔥</div>
+                        <span>Bold</span>
+                    </div>
+                </div>
+                <input type="text" id="player-name" placeholder="Enter Your Name..." maxlength="15">
+                <button id="btn-start-game" class="btn-primary" disabled>START ADVENTURE</button>
+            </div>
+        </div>
+
+        <!-- HUD -->
+        <div id="hud" class="hidden">
+            <div class="hud-top">
+                <div id="hud-name">Player</div>
+                <div id="hud-objectives">Objectives: 0/5</div>
+            </div>
+        </div>
+
+        <!-- Puzzle Modal -->
+        <div id="puzzle-modal" class="overlay">
+            <div id="puzzle-content" class="glass-panel">
+                <!-- Content injected via JS -->
+            </div>
+        </div>
+        
+        <!-- Victory Celebration -->
+        <div id="victory-screen" class="overlay">
+            <div class="glass-panel">
+                <h1>Strategic Vision Complete! 🚀</h1>
+                <div id="victory-summary"></div>
+                <button onclick="location.reload()" class="btn-primary">REPLAY</button>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Dependencies -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
