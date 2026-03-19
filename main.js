@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-// import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; 
-
+import { initializeApp } from 'firebase/app';
+import { getFirestore, doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 // --- CONFIGURATION ---
 const PLANET_RADIUS = 50;
 const MAX_PLAYER_SPEED = 0.22;
@@ -12,6 +12,49 @@ const CAMERA_LAG = 0.05; // Smoothing factor
 const CAMERA_TILT_STRENGTH = 2.0;
 
 let particles = [];
+
+// --- FIREBASE SETUP ---
+// REPLACE THE BELOW WITH YOUR ACTUAL FIREBASE CONFIG
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let currentSessionId = null;
+
+async function savePlayerData(name, trait) {
+    currentSessionId = `${name}_${Date.now()}`;
+    try {
+        await setDoc(doc(db, "participants", currentSessionId), {
+            name: name,
+            trait: trait,
+            won: false,
+            timestamp: serverTimestamp()
+        });
+        console.log("Player data saved to Firebase");
+    } catch (e) {
+        console.error("Error saving player data: ", e);
+    }
+}
+
+async function updatePlayerVictory() {
+    if (!currentSessionId) return;
+    try {
+        await updateDoc(doc(db, "participants", currentSessionId), {
+            won: true,
+            winTimestamp: serverTimestamp()
+        });
+        console.log("Player victory updated in Firebase");
+    } catch (e) {
+        console.error("Error updating victory: ", e);
+    }
+}
 
 // --- STATE ---
 let gameState = {
@@ -363,6 +406,7 @@ function createOSStructures() {
 function startGame() {
     console.log("Starting game...");
     createPlayer();
+    savePlayerData(gameState.playerName, gameState.playerTrait);
     switchScreen('playing');
 }
 
@@ -772,6 +816,7 @@ function checkVictory() {
     if (gameState.objectivesFound === gameState.totalObjectives) {
         gameState.screen = 'victory';
         victoryScreen.classList.add('active');
+        updatePlayerVictory();
         const summary = document.getElementById('victory-summary');
         summary.innerHTML = `
             <p>Congratulations ${gameState.playerName}! You have successfully discovered all 5 strategic objectives of the External Relations department.</p>
