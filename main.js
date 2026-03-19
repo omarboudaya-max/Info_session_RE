@@ -576,7 +576,8 @@ function startActualPuzzle(index) {
             `;
             let pointer = document.getElementById('pointer');
             let pos = 0;
-            let dir = 3 + successes * 2; // Speeds up!
+            // Start slower (was 3 + successes*2), now gentler progression
+            let dir = 2 + successes * 0.8;
             let anim = setInterval(() => {
                 pos += dir;
                 if (pos >= 98 || pos <= 0) dir *= -1;
@@ -593,8 +594,8 @@ function startActualPuzzle(index) {
                     if (successes === 3) setTimeout(() => completePuzzle(index), 600);
                     else setTimeout(startMeter, 800);
                 } else {
-                    successes = 0;
-                    document.getElementById('puzzle-feedback').innerText = "MISSED! RESETTING...";
+                    // Keep successes — don't reset to 0
+                    document.getElementById('puzzle-feedback').innerText = "MISSED! Try again...";
                     document.getElementById('puzzle-feedback').style.color = "#ef4444";
                     setTimeout(startMeter, 1200);
                 }
@@ -915,7 +916,10 @@ function onWindowResize() {
 // MOBILE CONTROLS
 // =====================
 function setupMobileControls() {
-    const isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    // Strict mobile check: must have touch AND a small screen (avoids desktop touchscreens)
+    const hasTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    const isSmallScreen = window.innerWidth <= 900;
+    const isMobile = hasTouch && isSmallScreen;
     if (!isMobile) return;
 
     document.getElementById('mobile-controls').classList.remove('hidden');
