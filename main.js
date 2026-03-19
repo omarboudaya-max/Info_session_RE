@@ -16,12 +16,12 @@ let particles = [];
 // --- FIREBASE SETUP ---
 // REPLACE THE BELOW WITH YOUR ACTUAL FIREBASE CONFIG
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyDwqf5Hpm34TngYTjxnRuQ2MBs5eGrm4i8",
+    authDomain: "info-session-f8816.firebaseapp.com",
+    projectId: "info-session-f8816",
+    storageBucket: "info-session-f8816.firebasestorage.app",
+    messagingSenderId: "13675320366",
+    appId: "1:13675320366:web:544a7193a5923b2e9fbbbf"
 };
 
 const app = initializeApp(firebaseConfig);
